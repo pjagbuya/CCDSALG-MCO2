@@ -54,7 +54,7 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
         JPanel instructionPanel = new JPanel(new GridLayout(0,8));
         instructionPanel.setFocusable(true);
         instructionPanel.add(instructionsLeft);
-
+        // If you wanna add more component to other branching windows, add component to instructionPanel
         instructionPanel.add(myButton);
 
 
@@ -62,6 +62,8 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
 
         //Set up the drawing area.
         drawingPane = new DrawingPane();
+
+        // Sets up the places of randomly assigned circles, for now i kept it 20, you can DELETE once you have file reader ready
         for(int k = 0; k < 20; k++)
         {
             newX = randomizer.nextInt(1200);
