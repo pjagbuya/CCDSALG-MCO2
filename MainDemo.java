@@ -54,68 +54,43 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
         JPanel instructionPanel = new JPanel(new GridLayout(0,8));
         instructionPanel.setFocusable(true);
         instructionPanel.add(instructionsLeft);
-        // If you wanna add more component to other branching windows, add component to instructionPanel
+
         instructionPanel.add(myButton);
 
 
 
-
+        this.setPreferredSize(new Dimension(1600, 9600));
         //Set up the drawing area.
         drawingPane = new DrawingPane();
-
-        // Sets up the places of randomly assigned circles, for now i kept it 20, you can DELETE once you have file reader ready
-        for(int k = 0; k < 20; k++)
+        int addX = 75;
+        int addY = 75;
+        newX = 0;
+        newY = 0;
+        while(newY < 9600)
         {
-            newX = randomizer.nextInt(1200);
-            newY = randomizer.nextInt(1200);
-            
-
-            tempNode = new Node(k, newX, newY);
-            nodeInfos.add(tempNode);
-            
-        }
-
-
-        //This block of code prevents overlapping nodes
-        nodeInd = 0;
-        while(nodeInd < nodeInfos.size())
-        {
-            Node currNode;
-            tempNode = nodeInfos.get(nodeInd);
-             newX =  nodeInfos.get(nodeInd).getX();
-             newY =  nodeInfos.get(nodeInd).getY();
-
-             int startInd;
-             startInd =0;
-            while(startInd < nodeInfos.size()) 
+            for(int k = 0; k < 5000; k++)
             {
-                if(startInd == nodeInd)
+                if(newX > 1600)
                 {
-                    startInd+=1;
-                    if(startInd >= nodeInfos.size())
-                        break;
+                    newX = 0;
+                    newY += 75;
                 }
+                newX +=75;
                 
-                while(newX >= nodeInfos.get(startInd).getX() - 100  && 
-                    newX <= nodeInfos.get(startInd).getX() + 100  && 
-                    newY >= nodeInfos.get(startInd).getY() - 100  &&
-                    newY <= nodeInfos.get(startInd).getY() + 100)
-                {
-                    newX = randomizer.nextInt(1200);
-                    newY = randomizer.nextInt(1200);
-                    tempNode.setX(newX);
-                    tempNode.setY(newY);
-                    startInd =0;
-                }   
-                    
-                startInd++;
+                
+
+                tempNode = new Node(k, newX, newY);
+                nodeInfos.add(tempNode);
+                updateDrawing(tempNode.getX(), tempNode.getY(), tempNode);
             }
+        }
+
+
+
+      
             
 
-            updateDrawing(tempNode.getX(), tempNode.getY(), tempNode);
 
-            nodeInd++;
-        }
 
         // Sets up random relations to each number
         for(int m = 0; m < nodeInfos.size(); m++)
@@ -128,7 +103,7 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
             int j = 0;
             while(j < randNum)
             {
-                tempNode2 = nodeInfos.get(randomizer.nextInt(19));
+                tempNode2 = nodeInfos.get(randomizer.nextInt(999));
                 if(nodeInfos.get(m) != tempNode2 && !nodeInfos.get(m).isRelated(tempNode2))
                 {
 
@@ -151,7 +126,7 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
         for(int i = 0; i < nodeInfos.size(); i++)
         {
             tempNode = nodeInfos.get(i);
-            System.out.println(tempNode);
+
             for (int j = 0; j < nodeInfos.size(); j++)
             {
                 tempNode2 = nodeInfos.get(j);
@@ -216,7 +191,7 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
                     tempRelations = tempNode.getRelations();
 
                     rInd = 0;
-                    System.out.println(tempNode);
+
                     if(!isUpdateBasedOnAttached)
                     {
                         while(rInd < tempRelations.size())
@@ -356,7 +331,7 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
         
         if(SwingUtilities.isRightMouseButton(e))
         {
-            System.out.println("X: " + x +", Y: " + y);
+
             isUpdateBasedOnAttached = true;
             for(int i = 0; i < nodeInfos.size(); i++)
             {
@@ -480,10 +455,12 @@ public class MainDemo extends JPanel implements MouseListener,ActionListener{
         //Create and set up the window.
         JFrame frame = new JFrame("MCO2 CCDSALG");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setPreferredSize(new Dimension(1200, 900));
         //Create and set up the content pane.
         JComponent newContentPane = new MainDemo();
         newContentPane.setOpaque(true); //content panes must be opaque
+
+        
 
         frame.setContentPane(newContentPane);
 

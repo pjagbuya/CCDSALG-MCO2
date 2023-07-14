@@ -12,6 +12,7 @@ public class GraphRepPanel extends JPanel
     private ArrayList<Integer> XPOS;
     private boolean updateLine;
     private Node selectedNode;
+    private int MAX = 400;
 
     private int maxStringLen;
     public GraphRepPanel(ArrayList<Node> nodeInfos)
@@ -49,6 +50,7 @@ public class GraphRepPanel extends JPanel
         int origStartY = 70;
         int startX;;
         int startY;
+        int size;
 
         startX = origStartX;
         startY = origStartY;
@@ -58,8 +60,12 @@ public class GraphRepPanel extends JPanel
         maxStringLen = 0;
 
         g.setFont(new Font("default", Font.BOLD, 20));
+        
+        int i;
+        i = 0;
         for(Node temp: nodeData)
         {
+            i++;
 
             if(!uniqueNodes.contains(temp))
             {
@@ -69,6 +75,8 @@ public class GraphRepPanel extends JPanel
                     maxStringLen = (temp.getSelfNum() + "").length();
                 
             }
+            if(i>MAX)
+                break;
 
 
             
@@ -82,7 +90,7 @@ public class GraphRepPanel extends JPanel
         g.drawLine(startX + 150, startY+10, startX+150, startY+10  + uniqueNodes.size()*50+50); // LEFT LINE
         g.drawLine(startX +150 + uniqueNodes.size()*50+50, startY+10, startX +150+ uniqueNodes.size()*50+50, startY+10  + uniqueNodes.size()*50+50); // RIGHT LINE
         g.drawLine(startX +150, startY+10  + uniqueNodes.size()*50+50, startX +150 + uniqueNodes.size()*50+50, startY+10  + uniqueNodes.size()*50+50); // BOTTOM LINE
-        int i = 0;
+        i = 0;
         //setup labels
         for(Node temp: uniqueNodes)
         {
@@ -93,7 +101,8 @@ public class GraphRepPanel extends JPanel
             g.drawString(temp.getSelfNum() + "", startX + 120 - 10*(temp.getSelfNum() +"").length() , startY+ i*50);
 
             XPOS.add(startX+ 150 + i*50 - 5*((temp.getSelfNum() +"").length()-1));
-            
+            if(i > MAX)
+                break;
      
 
 
@@ -135,7 +144,7 @@ public class GraphRepPanel extends JPanel
 
                 // 10*(temp.getSelfNum() +"").length()
             }
-
+            
             startY += 50;
 
         }

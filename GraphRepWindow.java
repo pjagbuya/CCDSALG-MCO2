@@ -97,7 +97,7 @@ public class GraphRepWindow extends JFrame implements ActionListener
             }
         });
         
-        addMouseMovedAtPanel(graphPanel);
+        // addMouseMovedAtPanel(graphPanel);
         graphPanel.revalidate();
         graphPanel.repaint();
 
@@ -123,6 +123,7 @@ public class GraphRepWindow extends JFrame implements ActionListener
 
 
         this.setSize(800,800);
+
 
         this.setVisible(true);
 
