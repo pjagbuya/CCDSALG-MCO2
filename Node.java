@@ -7,20 +7,15 @@ import java.util.LinkedHashMap;
 public class Node {
     private int num;
     private ArrayList<Node> relations;
-    private LinkedHashMap<Integer, Boolean> isAttached;
-    private Color nodeLineColor;
-    private int posX;
-    private int posY;
 
-    public Node(int num, int X, int Y)
+
+    public Node(int num)
     {
 
         this.num = num;
-        posX = X;
-        posY = Y;
+
         relations = new ArrayList<Node>();
-        isAttached = new LinkedHashMap<Integer, Boolean>();
-        nodeLineColor = null;
+
 
     }
     //delete
@@ -37,29 +32,12 @@ public class Node {
         }
         return false;
     }
-    public void addAttached(Node givenNum)
+
+    public void addRelation(Node node)
     {
-        isAttached.put(givenNum.getSelfNum(), true);
-    }
-    public boolean isAttached(Node givenNum)
-    {
-        return isAttached.containsKey(givenNum.getSelfNum());
-        
-    }
-    public Color isRelatedHaveColor()
-    {
-        for(Node tempNode : relations)
+        if(!relations.contains(node))
         {
-            if (tempNode.getColor() != null);
-                return tempNode.getColor();
-        }
-        return null;
-    }
-    public void addRelation(Node newNum)
-    {
-        if(!relations.contains(newNum))
-        {
-            relations.add(newNum);
+            relations.add(node);
 
         }
             
@@ -74,31 +52,8 @@ public class Node {
     {
         return num;
     }
-    public void setX(int x)
-    {
-        posX = x;
-    }
-    public void setY(int y)
-    {
-        posY = y;
-    }
-    public int getX()
-    {
-        return posX;
-    }
 
-    public int getY()
-    {
-        return posY;
-    }
-    public Color getColor()
-    {
-        return nodeLineColor;
-    }
-    public void setNodeLineColor(Color color)
-    {
-        nodeLineColor = color;
-    }
+
 
     @Override
     public String toString()
