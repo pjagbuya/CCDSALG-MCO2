@@ -244,7 +244,7 @@ public class GraphRepWindow extends JFrame implements ActionListener
             
 
             
-            if(path.size() != 1 || path.get(0) == selB.getSelfNum())
+            if(path.size() != 1 || path.get(path.size()-1) == selB.getSelfNum())
             {
                 friendListLabel = new JLabel("There is connection from " + selA.getSelfNum() + " to " + selB.getSelfNum());
             }
