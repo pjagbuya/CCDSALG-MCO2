@@ -40,7 +40,7 @@ public class GraphRepWindow extends JFrame implements ActionListener
         JPanel connectionPanel = new JPanel();
         connectionButton = new JButton("Find Connection");
         connectionPanel.setLayout(new BoxLayout(connectionPanel, BoxLayout.Y_AXIS));
-        labelForConnectionFinding = new JLabel("Find a Connection between two IDs");
+        labelForConnectionFinding = new JLabel("Find a Connection between two IDs (Node A to B)");
         //Traversing Components
         connectionPanel.add(labelForConnectionFinding);
         connectionPanel.add(Box.createRigidArea(new Dimension(0,5))); 
@@ -244,7 +244,7 @@ public class GraphRepWindow extends JFrame implements ActionListener
             
 
             
-            if(path.size() != 1)
+            if(path.size() != 1 || path.get(0) == selB.getSelfNum())
             {
                 friendListLabel = new JLabel("There is connection from " + selA.getSelfNum() + " to " + selB.getSelfNum());
             }
