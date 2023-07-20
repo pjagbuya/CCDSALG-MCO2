@@ -1,325 +1,163 @@
-import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 
-import java.security.SecureRandom;
+public class MainDemo {
+    private static Scanner sc;
+    private static FriendGraph friendGraph;
+    private static boolean shouldTerminate;
 
+    public static void main(String[] args) {
+        sc = new Scanner(System.in);
+        friendGraph = null;
+        shouldTerminate = false;
 
-public class MainDemo{
-
-    private Node selectedNode;
-
-
-    private static ArrayList<Node> nodeInfos;
-
-
-
-
-    private static boolean isTerminate;
-    public static void main(String[] args) 
-    {
-
-        boolean isValidFile;
-
-        boolean isRenewFile;
-        Node tempNode;
-
-        SecureRandom randomizer = new SecureRandom();
-        Scanner sc = new Scanner(System.in);
-
-
-        int nodeInd;
-        Node tempNode2;
-        String userInputC;
-
-
-
-        MainDemo md = new MainDemo();
-        isTerminate = false;
-
-
-        // Double checks if each relation is added correctly
-
-        isValidFile = false;
-        nodeInfos = new ArrayList<Node>();
-      
-        isRenewFile = false;
-        while(!isValidFile)
-        {
+        while (true) {
             FileReader fr = new FileReader();
-            if(!isRenewFile)
-            {
-                while(!isValidFile)
-                {
-                    if(nodeInfos != null)
-                        nodeInfos.clear();
-                    System.out.print("Input file: ");
-                    isValidFile = fr.readFileNodes(sc.nextLine(), nodeInfos);
-                    if(isValidFile && nodeInfos != null)
-                    {
-                        System.out.println("File is found. Graph is Loaded");
-                    }
-                    else
-                        System.out.println("ERROR: Unable to load file");
-                }
 
+            System.out.print("Input file: ");
+            friendGraph = fr.readFileNodes(sc.nextLine());
+
+            if (friendGraph != null) {
+                System.out.println("File is found. Graph is Loaded.");
+                break;
+            } else {
+                System.out.println("ERROR: Unable to load file! Kindly try again.");
             }
-            isRenewFile = true;
-
-            // for(Node temp : nodeInfos)
-            // {
-            //     System.out.println(temp);
-            // }
-
-            while(isValidFile)
-            {
-                if(!nodeInfos.isEmpty())
-                    md.displayMenu();
-                else
-                {
-                    System.out.println(Paint.paintTextOrange("No data to display"));
-                    break;
-                }
-                    
-
-                System.out.println();
-                System.out.print("Run another file? (Y/N): ");
-                userInputC = sc.nextLine();
-
-
-                // Cleanup section
-                if(userInputC.equalsIgnoreCase("y"))
-                {
-
-                    isRenewFile = false;
-                    break;
-
-
-                    
-                }
-
-
-
-            }
-            if(!isTerminate)
-            {
-                isValidFile = false;
-            }
-
-
-
         }
+
+        if (friendGraph.isEmpty()) {
+            System.out.println(Paint.paintTextOrange("No data to display"));
+            sc.close();
+            return;
+        }
+
+        while (!shouldTerminate) {
+            System.out.println();
+            displayMenu();
+        }
+
         System.out.println();
         System.out.println("Terminating program...");
-
         sc.close();
-         
-
-
-
     }
-    private void displayMenu()
-    {
-        boolean isExit;
-        HashSet<Integer> visited;
-        ArrayList<Integer> path;
-        
-        boolean isValidID;
+
+    private static void displayMenu() {
         int input;
-        int inputSelected;
-        int selectA;
-        int selectB;
-        Scanner scMenu = new Scanner(System.in);
-        MainDemo md = new MainDemo();
+        boolean invalidOption = true;
 
-        System.out.println();
-        System.out.println("Main Menu");
-        System.out.println(Paint.paintTextCyan("[1]") + " Get friend list");
-        System.out.println(Paint.paintTextCyan("[2]") + " Get connection");
-        System.out.println(Paint.paintTextCyan("[3]") + " Exit");
-
-        isExit = false;
-
-        visited = new HashSet<Integer>();
-        path = new ArrayList<Integer>();
-        while(!isExit)
-        {
-            System.out.print("Input choice: ");
-            input = Integer.parseInt(scMenu.nextLine());
+        while (invalidOption) {
+            System.out.println(Paint.paintTextMagenta("MAIN MENU"));
+            System.out.println(Paint.paintTextCyan("[1]") + " Get friend list");
+            System.out.println(Paint.paintTextCyan("[2]") + " Get connection");
+            System.out.println(Paint.paintTextCyan("[3]") + " Exit");
             
-            switch(input)
-            {
-                case 1:
+            System.out.print("\nInput choice: ");
+            input = Integer.parseInt(sc.nextLine());
 
-
+            switch (input) {
+                case 1: {
                     System.out.println();
-                    System.out.print("Enter person ID: ");
-                    inputSelected = scMenu.nextInt();
-                    scMenu.nextLine();
-                    if(findNode(nodeInfos, inputSelected) != null)
-                        md.displaySelected(findNode(nodeInfos, inputSelected));
-                    else
-                        System.out.println(Paint.paintTextOrange("ERROR: ID does not exist"));
+                    System.out.println(Paint.paintTextMagenta("GET FRIEND LIST"));
+                    System.out.println(Paint.paintTextMagenta("---------------"));
 
-                    
+                    System.out.print("\nEnter person ID: ");
 
-                    isExit = true;
-                    break;
-                case 2:
-                    
-                    isValidID = false;
-                    while(!isValidID)
-                    {
-                        try
-                        {
-                            System.out.println();
-                            System.out.println("Enter person ID of " + Paint.paintTextCyan("first") + " and " + Paint.paintTextCyan("second to get connection of first to second"));
-                            System.out.print("Enter first person ID: ");
-                
-                            selectA = scMenu.nextInt();
-                            scMenu.nextLine();
+                    int inputSelected = sc.nextInt();
+                    sc.nextLine();
 
-                            System.out.print("Enter second person ID: ");
-                            selectB = scMenu.nextInt();
-                            scMenu.nextLine();
+                    Node personNode = friendGraph.getPersonNode(inputSelected);
 
-                            if(selectA < 0 || selectB < 0)
-                                System.out.println(Paint.paintTextOrange("ERROR: Invalid inputs of ID"));
-                            if(findNode(nodeInfos, selectA) == null || findNode(nodeInfos, selectA) == null)
-                                break;
-
-                            md.performDFS(findNode(nodeInfos, selectA), findNode(nodeInfos, selectB), visited, path);
-                            md.displayConnections(selectA, selectB, path);
-                        }
-                        catch(Exception e)
-                        {
-
-                            isValidID = true;
-                        }
-
+                    if (personNode != null) {
+                        displayFriendList(personNode);
+                    } else {
+                        System.out.print(Paint.paintTextOrange("ERROR: ID does not exist."));
                     }
 
-
-
-
-                    isExit = true;
+                    invalidOption = false;
                     break;
-                case 3:
-                    isTerminate = true;
-                    isExit = true;
-                    break;
-                default:
-                    isExit = false;
-                    System.out.println(Paint.paintTextOrange("ERROR: Please choos from 1- 3"));
-                
-
-
-            }
-        }
-
-  
-
-        scMenu = null;
-        md = null;
-        
-
-    }
-
-    private void displayConnections(int firstNum, int secNum, ArrayList<Integer> path)
-    {
-        int i;
-        int prev = firstNum;
-        if((path.size() > 1 && path.get(path.size()-1) == secNum) || (path.size()== 1 && path.get(path.size()-1) == secNum))
-        {
-            System.out.println(Paint.paintTextGreen("There is a connection found between "+ firstNum + " and " + secNum));
-            
-            
-            for(int num: path)
-            {
-
-                System.out.println(Paint.paintTextCyan(prev + "") + " is friends with " + Paint.paintTextCyan(num  + ""));
-                prev = num;
-
-                
-            }
-        }
-        else
-        {
-            System.out.println(Paint.paintTextOrange("There is no connection found between "+ firstNum + " and " + secNum));
-        }
-
-
-    }
-    private void displaySelected(Node givenNode)
-    {
-
-        System.out.println();
-        System.out.println("Person of ID " + Paint.paintTextCyan(givenNode.getSelfNum()+"") + " has " + Paint.paintTextYellow(givenNode.getRelations().size()+"") + " friend/s");
-        System.out.print("List of friends: ");
-        for(Node temp : givenNode.getRelations())
-        {
-
-            Paint.turnOnGreen();
-            System.out.print(temp.getSelfNum() + " ");
-            Paint.turnOffColor();
-
-        }
-
-        if(givenNode.getRelations().size() == 0)
-        {
-            System.out.print(Paint.paintTextOrange("NONE"));
-        }
-
-
-    }
-
-    
-    private Node findNode(ArrayList<Node> nodeList, int num)
-    {
-        if(nodeList == null) 
-        {
-            throw new IllegalArgumentException("The node list is null");
-        }
-    
-
-        for(Node getNode : nodeList)
-        {
-            if(getNode.getSelfNum() == num)
-            {
-                return getNode;
-            }
-        }
-
-        return null;
-    }
-    private void performDFS(Node start, Node end, HashSet<Integer> visited, ArrayList<Integer> path) 
-    {
-        visited.add(start.getSelfNum());
-
-        if(start.getSelfNum() == end.getSelfNum())
-            return;
-        
-        for (Node tempNode : start.getRelations()) {
-            if (!visited.contains(tempNode.getSelfNum())) {
-
-                // Add the path
-                path.add(tempNode.getSelfNum());
-                performDFS(tempNode, end, visited, path);
-                // When the relations on the branches of this node have the goal node, return
-                if(path.contains(end.getSelfNum())) {
-
-                    return;
                 }
 
-                // Remove node considered as path
-                path.remove(tempNode);
+                case 2: {
+                    System.out.println();
+                    System.out.println(Paint.paintTextMagenta("GET CONNECTIONS"));
+                    System.out.println(Paint.paintTextMagenta("---------------"));
+                    System.out.println();
 
+                    System.out.print(
+                        "Enter " + Paint.paintTextCyan("first") + " person ID: ");
+                    int selectA = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print(
+                        "Enter " + Paint.paintTextCyan("second") + " person ID: ");
+                    int selectB = sc.nextInt();
+                    sc.nextLine();
+
+                    if (
+                        friendGraph.getPersonNode(selectA) == null || 
+                        friendGraph.getPersonNode(selectB) == null
+                    ) {
+                        System.out.println(Paint.paintTextOrange("ERROR: Invalid IDs."));
+                        break;
+                    }
+                    
+                    System.out.println();
+
+                    List<Node> path = friendGraph.findPath(selectA, selectB);
+                    displayPath(selectA, selectB, path);
+                    break;
+                }
+
+                case 3: {
+                    invalidOption = false;
+                    shouldTerminate = true;
+                    break;
+                }
+
+                default:
+                    System.out.println(Paint.paintTextOrange("ERROR: Please choose from 1-3."));
             }
+
+            System.out.println();
         }
-    
-
-
     }
+
+    private static void displayFriendList(Node givenNode) {
+        System.out.println();
+        System.out.println(
+            "Person of ID " + Paint.paintTextCyan(givenNode.getSelfNum()+"") + 
+            " has " + Paint.paintTextYellow(givenNode.getRelations().size()+"") + 
+            " friend/s.");
+
+        System.out.print("List of friends: ");
+
+        for (Node temp : givenNode.getRelations()) {
+            System.out.print(Paint.paintTextGreen(temp.getSelfNum() + " "));
+        }
+
+        if (givenNode.getRelations().size() == 0) {
+            System.out.print(Paint.paintTextOrange("NONE"));
+        }
+    }
+
+    private static void displayPath(int firstNum, int secNum, List<Node> path) {
+        if (path.size() == 0) {
+            System.out.println(Paint.paintTextOrange(
+                "Cannot find a connection between " + firstNum + 
+                " and " + secNum + "."));
+            return;
+        }
+
+        System.out.println(Paint.paintTextGreen(
+            "There is a connection from "+ firstNum + " and " + secNum + "!"));
+
+        for (int i = 1; i < path.size(); i++) {
+            Node prev = path.get(i - 1);
+            Node curr = path.get(i);
+
+            System.out.println(
+                Paint.paintTextCyan(prev.getSelfNum() + "") + " is friends with " + 
+                Paint.paintTextCyan(curr.getSelfNum() + ""));
+        }
+    }
+
 }
