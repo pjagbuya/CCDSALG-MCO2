@@ -35,7 +35,6 @@ public class MainDemo {
             displayMenu();
         }
 
-        System.out.println();
         System.out.println("Terminating program...");
         sc.close();
     }
@@ -140,7 +139,7 @@ public class MainDemo {
     }
 
     private static void displayPath(int firstNum, int secNum, List<Node> path) {
-        if (path.size() == 0) {
+        if (path == null) {
             System.out.println(Paint.paintTextOrange(
                 "Cannot find a connection between " + firstNum + 
                 " and " + secNum + "."));
