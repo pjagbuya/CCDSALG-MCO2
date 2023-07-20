@@ -3,11 +3,12 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
+import java.util.Queue;
 import java.security.SecureRandom;
 
 
-public class MainDemo{
+public class MainDemo
+{
 
     private Node selectedNode;
 
@@ -125,7 +126,8 @@ public class MainDemo{
         boolean isExit;
         HashSet<Integer> visited;
         ArrayList<Integer> path;
-        
+        Node startNode;
+        Node endNode;
         boolean isValidID;
         int input;
         int inputSelected;
@@ -186,12 +188,29 @@ public class MainDemo{
                             scMenu.nextLine();
 
                             if(selectA < 0 || selectB < 0)
+                            {
                                 System.out.println(Paint.paintTextOrange("ERROR: Invalid inputs of ID"));
-                            if(findNode(nodeInfos, selectA) == null || findNode(nodeInfos, selectA) == null)
                                 break;
+                            }
+                            startNode = findNode(nodeInfos, selectA);
+                            endNode = findNode(nodeInfos, selectB);
+                            if( startNode != null || endNode != null)
+                            {
+                                path = md.performBFS(startNode, endNode);
 
-                            md.performDFS(findNode(nodeInfos, selectA), findNode(nodeInfos, selectB), visited, path);
-                            md.displayConnections(selectA, selectB, path);
+                                md.displayConnections(selectA, selectB, path);
+
+                                
+                                
+                            }
+                            else
+                            {
+                                System.out.println(Paint.paintTextOrange("There is no connection found between "+ startNode + " and " + endNode));
+                                break;
+                            }
+                               
+
+
                         }
                         catch(Exception e)
                         {
@@ -230,19 +249,26 @@ public class MainDemo{
     private void displayConnections(int firstNum, int secNum, ArrayList<Integer> path)
     {
         int i;
-        int prev = firstNum;
-        if((path.size() > 1 && path.get(path.size()-1) == secNum) || (path.size()== 1 && path.get(path.size()-1) == secNum))
+
+        i =0;
+
+        if (path != null && !path.isEmpty() && (path.size() > 1 && path.get(path.size() - 1) == secNum))
+
         {
             System.out.println(Paint.paintTextGreen("There is a connection found between "+ firstNum + " and " + secNum));
             
             
             for(int num: path)
             {
-
-                System.out.println(Paint.paintTextCyan(prev + "") + " is friends with " + Paint.paintTextCyan(num  + ""));
-                prev = num;
-
                 
+                
+                if(path.get(path.indexOf(num)+1) == path.size())
+                    break;
+                    
+                System.out.println(Paint.paintTextCyan(num + "") + " is friends with " + Paint.paintTextCyan(path.get(path.indexOf(num)+1)  + ""));
+
+
+                i+=1;
             }
         }
         else
@@ -294,32 +320,59 @@ public class MainDemo{
 
         return null;
     }
-    private void performDFS(Node start, Node end, HashSet<Integer> visited, ArrayList<Integer> path) 
+
+    private ArrayList<Integer> performBFS(Node start, Node end) 
     {
+        Queue<Node> que = new LinkedList<>();
+        HashSet<Integer> visited = new HashSet<>();
+        HashMap<Node, Node> parentMapping = new HashMap<>();
+        // Node current;
+        
+        que.add(start);
         visited.add(start.getSelfNum());
 
-        if(start.getSelfNum() == end.getSelfNum())
-            return;
+        while(!que.isEmpty())
+        {
+            Node current = que.poll();
+            if(current.equals(end))
+                return backTrackPath(parentMapping, start, end);
         
-        for (Node tempNode : start.getRelations()) {
-            if (!visited.contains(tempNode.getSelfNum())) {
-
-                // Add the path
-                path.add(tempNode.getSelfNum());
-                performDFS(tempNode, end, visited, path);
-                // When the relations on the branches of this node have the goal node, return
-                if(path.contains(end.getSelfNum())) {
-
-                    return;
+        
+            for(Node neighbor : current.getRelations())
+            {
+                if(!visited.contains(neighbor.getSelfNum()))
+                {
+                    que.add(neighbor);
+                    visited.add(neighbor.getSelfNum());
+                    parentMapping.put(neighbor, current);
                 }
-
-                // Remove node considered as path
-                path.remove(tempNode);
-
             }
+        
         }
+
+
+        return null;
     
 
 
     }
+
+    private ArrayList<Integer> backTrackPath(HashMap<Node, Node> parentMapping, Node start, Node end)
+    {
+        ArrayList<Integer> path = new ArrayList<>();
+
+        Node current = end;
+
+        while(current != null)
+        {
+            path.add(current.getSelfNum());
+            current = parentMapping.get(current);
+        }
+        Collections.reverse(path);
+        if(path.get(0).equals(start.getSelfNum()))
+            return path;
+        else
+            return null;
+    }
+
 }
