@@ -1,71 +1,24 @@
-import java.awt.Color;
-import java.util.ArrayList;
-import java.security.SecureRandom;
-import java.util.LinkedHashMap;
-
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Node {
     private int num;
-    private ArrayList<Node> relations;
+    private Set<Node> relations;
 
-
-    public Node(int num)
-    {
-
+    public Node(int num) {
         this.num = num;
-
-        relations = new ArrayList<Node>();
-
-
+        relations = new LinkedHashSet<Node>();
     }
-    //delete
-    public void setNum(int n)
-    {
-        num =n;
-    }
-
-    public boolean isRelated(Node givenNum)
-    {
-        if(relations.contains(givenNum) || givenNum.getRelations() != null && givenNum.getRelations().contains(this))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void addRelation(Node node)
-    {
-        if(!relations.contains(node))
-        {
-            relations.add(node);
-
-        }
-            
-
-    }
-    public ArrayList<Node> getRelations()
-    {
+    
+    public Set<Node> getRelations() {
         return relations;
     }
 
-    public int getSelfNum()
-    {
+    public int getSelfNum() {
         return num;
     }
 
-
-
-    @Override
-    public String toString()
-    {
-        String temp;
-        temp = "";
-        for(int i = 0; i < relations.size(); i++)
-        {
-            temp += getSelfNum() + " is related to: " + relations.get(i).getSelfNum() + "\n";
-        }
-        return temp;
+    public void addRelation(Node node) {
+        relations.add(node);
     }
-
-
 }
