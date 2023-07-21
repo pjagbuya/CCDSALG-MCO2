@@ -149,13 +149,13 @@ public class MainDemo {
         System.out.println(Paint.paintTextGreen(
             "There is a connection from "+ firstNum + " and " + secNum + "!"));
 
-        for (int i = 1; i < path.size(); i++) {
-            Node prev = path.get(i - 1);
+        for (int i = path.size() - 1; i > 0; i--) {
             Node curr = path.get(i);
+            Node next = path.get(i - 1);
 
             System.out.println(
-                Paint.paintTextCyan(prev.getSelfNum() + "") + " is friends with " + 
-                Paint.paintTextCyan(curr.getSelfNum() + ""));
+                Paint.paintTextCyan(curr.getSelfNum() + "") + " is friends with " + 
+                Paint.paintTextCyan(next.getSelfNum() + ""));
         }
     }
 

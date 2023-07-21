@@ -1,4 +1,3 @@
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -51,10 +50,10 @@ public class FriendGraph {
     }
     
     private List<Node> performBFS(Node start, Node end) {
-        Queue<Node> queue = new ArrayDeque<>();
+        Queue<Node> queue = new LinkedList<>();
         Set<Node> visited = new HashSet<>();
         Map<Node, Node> parentMapping = new HashMap<>();
-
+        
         queue.add(start);
         visited.add(start);
 
@@ -92,7 +91,6 @@ public class FriendGraph {
             current = parentMapping.get(current);
         }
 
-        Collections.reverse(path);
         return path;
     }
 }
