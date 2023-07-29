@@ -46,10 +46,9 @@ public class FriendGraph {
     }
 
     public List<Node> findPath(int person1No, int person2No) {
-        return performBFS(getPersonNode(person1No), getPersonNode(person2No));
-    }
-    
-    private List<Node> performBFS(Node start, Node end) {
+        Node start = getPersonNode(person1No);
+        Node end = getPersonNode(person2No);
+        
         Queue<Node> queue = new LinkedList<>();
         Set<Node> visited = new HashSet<>();
         Map<Node, Node> parentMapping = new HashMap<>();
